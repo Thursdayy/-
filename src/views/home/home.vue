@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow-y:hidden">
     <header class="head">
       <div class="location">
         <span class="iconfont icon-location"></span>
@@ -8,9 +8,9 @@
       </div>
     </header>
     <!-- search -->
-    <router-link to="" class="search" tag="div">
-      <div class="search-box">
-        <span class="iconfont icon-sousuo"></span>
+    <router-link to="" class="search" tag="div" ref="searchBox">
+      <div class="search-box" >
+        <span class="iconfont icon-sousuo"  ></span>
         <span>搜索饿了么商家、商品名称</span>
       </div>
     </router-link>
@@ -32,9 +32,18 @@
         <img class="banner-img" :src="banner.imgpath">
       </div>
     </div>
-    <mt-goodslist v-bind:good="indexid"></mt-goodslist>
+    <!-- title -->
+    <div class="home-t">
+      <p><span>——</span>推荐商家<span>——</span></p>
+    </div>
+    <!-- sort bar -->
+    <!-- <div class="sort-box"> -->
+      <mt-sort ref="sort"></mt-sort>
+    <!-- </div> -->
+    <mt-goodslist v-bind:good="indexid" ref="lis"></mt-goodslist>
     <!-- 底部导航 -->
     <mt-tabbar :selected="selected"></mt-tabbar>
+    <div class="mark" ref="mark" @click="markEvt"></div>
   </div>
 </template>
 
@@ -42,6 +51,7 @@
 import {getItems} from '@/api/homeItems';
 import Tabbar from '@/components/Tabbar.vue';
 import GoodsList from './GoodsList.vue';
+import sort from '@/components/Sort.vue'
 export default {
   name:"home",
   data(){
@@ -54,6 +64,9 @@ export default {
   },
   created() {
     this.getItemsList();
+    window.addEventListener("scroll",() => {
+        this.ScrollEvt();
+    },false);
   },
   methods:{
     getItemsList(){
@@ -61,11 +74,79 @@ export default {
         this.itemList = res.message.items;
         this.banner = res.message.banner;
       });
+    },
+    ScrollEvt(){
+     
+      let top = window.pageYOffset;
+      // console.log(top);
+      let sort = this.$refs.sort.$el;
+      let rect = this.$refs.lis.$el.getBoundingClientRect()
+      if(top > 44.5){
+        this.$refs.searchBox.$el.style.position = 'fixed';
+        this.$refs.searchBox.$el.style.top = 0;
+        this.$refs.searchBox.$el.style.left = 0;
+        this.$refs.searchBox.$el.style.zIndex = 5;
+        // console.log(this.$refs.searchBox);
+      }else{
+        this.$refs.searchBox.$el.style.position = '';
+      }
+      if(top > 322){
+        sort.style.position = 'fixed';
+        sort.style.top = this.$refs.searchBox.$el.offsetHeight + 'px';
+        sort.style.left = 0;
+        sort.style.zIndex = 5;
+      }
+      else if(top < 280){
+        sort.style.position = '';
+        sort.style.top = 0;
+      }
+      // rect.top < (this.$refs.searchBox.$el.offsetHeight + sort.offsetHeight)
+    },
+    // markShow(){
+    //   let mark = this.$refs.mark;
+    //   mark.style.display = 'block';
+    // },
+    // markClose(){
+    //   let mark = this.$refs.mark;
+    //   mark.style.display = 'none';
+    // },
+    markClose(){
+      let mark = this.$refs.mark;
+      mark.style.display = 'none'
+      // console.log(getComputedStyle(mark).display);
+      // if(getComputedStyle(mark).display == 'none'){
+      //   mark.style.display = 'block';
+      //   document.documentElement.style.overflow='hidden';
+      // }else{
+      //   mark.style.display = 'none';
+      //   document.documentElement.style.overflow='';
+      //   this.$refs.sort.sectionClose();
+      // }
+      
+    },
+    markOpen(){
+      let mark = this.$refs.mark;
+      mark.style.display = 'block'
+    },
+    markEvt(){
+      let mark = this.$refs.mark;
+      if(getComputedStyle(mark).display == 'none'){
+        mark.style.display = 'block';
+        document.documentElement.style.overflow='hidden';
+      }else{
+        mark.style.display = 'none';
+        document.documentElement.style.overflow='';
+        this.$refs.sort.sectionClose();
+      }
+    },
+    selecteEvt(){
+      console.log('准备刷新页面');
     }
   },
   components:{
     'mt-tabbar': Tabbar,
     'mt-goodslist': GoodsList,
+    'mt-sort':sort
   }
 }
 </script>
@@ -114,6 +195,11 @@ ul,ol{
     font-size: .16rem;
     line-height: .36rem;
     color: #999;
+  }
+  .fixed{
+    position:fixed;
+    top: 0;
+    left: 0;
   }
 }
 // grid
@@ -178,4 +264,42 @@ ul,ol{
     }
   }
 }
+// mark
+.mark{
+  width: 100%;
+  height: 555rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  opacity: .5;
+  z-index: 3;
+  display: none;
+}
+.home-t{
+  width: 100%;
+  height: .36rem;
+  background-color: #fff;
+  line-height: .36rem;
+  text-align: center;
+  color: #333;
+  span{
+    vertical-align: middle;
+    color: #333;
+    &:first-of-type{
+      margin-right: .05rem;
+    }
+    &:last-of-type{
+      margin-left: .05rem;
+    }
+  }
+  p{
+    color: #333;
+  }
+}
+.selected{
+  background-color: #edf5ff;
+  color:#3190e8;
+}
+
 </style>  

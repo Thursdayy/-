@@ -1,7 +1,7 @@
 <template>
   <div class="goodsinfo" ref="store" :id="head.id">
     <header class="head" ref="head">
-      <span class="iconfont icon-shangyiye"></span>
+      <span class="iconfont icon-shangyiye" @click="clickBack"></span>
       <div class="storeimg">
         <img :src="head.logo" />
       </div>
@@ -587,6 +587,10 @@ export default {
           }
         }
       }
+    },
+    // go back
+    clickBack: function(){
+      this.$router.go(-1);
     }
   },
   components: {

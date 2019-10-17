@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <mt-tabbar v-model="message" fixed>
+  <div >
+    <mt-tabbar v-model="message" fixed class="bar">
       <mt-tab-item id="index">
         <span slot="icon" class="iconfont icon-home"></span>
         外卖
@@ -59,6 +59,9 @@ export default {
 a{
   color:#333;
 }
+.bar{
+  z-index: 5 !important;
+}
 div{
   font-size: .14rem;
   .iconfont{
@@ -66,6 +69,7 @@ div{
     
   }
 }
+
 .mint-tabbar > .mint-tab-item.is-selected {
   background: transparent;
 }

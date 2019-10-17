@@ -6,6 +6,7 @@ import Find from './views/find/find.vue'
 import Order from './views/order/order.vue'
 import goodsinfo from './views/home/goodsInfo.vue';
 
+
 Vue.use(Router)
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -38,9 +39,10 @@ export default new Router({
       component: Order
     },
     {
-      path:'/goodsinfo/:id',
+      path:'/goodsinfo',
       component:goodsinfo,
       name: 'goodsinfo'
-    }
+    },
+    
   ]
 })

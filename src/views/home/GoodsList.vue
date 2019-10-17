@@ -4,7 +4,7 @@
       <ul
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
-        infinite-scroll-distance="200"
+        infinite-scroll-distance="400"
       >
         <li class="list" v-for="item in list" :key="item.id">
           <div tag="div" class="list-box" @click="toGoondInfo(item.id)">
@@ -74,22 +74,35 @@ export default {
   name: "GoodsList",
   data() {
     return {
-      list: "",
-      loading: false
+      list: [],
+      loading: true,
+      index:1,
     };
   },
   created() {
-    this.getGoods();
+    this.getGoods(this.index++);
+  },
+  mounted() {
+    
   },
   props: ["good"],
   methods: {
     loadMore() {
-      // this.loading = true;
-      console.log("触发了");
+      this.loading = true;
+      // console.log("触发了");
+      // let id = this.index + 1;
+      this.getGoods(this.index++);
     },
-    getGoods(){
-      getItems(1).then(res => {
-        this.list = res.message.goodsList;
+    getGoods(index){
+      getItems(index).then(res => {
+        if(index != 1){
+            for(let i=0; i<res.message.goodsList.length; i++){
+            res.message.goodsList[i].id = res.message.goodsList[i].id + ((index-1) * 5);
+          }
+        }
+        this.list = this.list.concat(res.message.goodsList);
+        // console.log(this.list);
+        this.loading = false;
       });
     },
     toGoondInfo(id) {
@@ -101,6 +114,7 @@ export default {
 <style lang="less" scoped>
 .gooslist{
   margin-bottom: .55rem;
+  background-color: #fff;
 }
 ul {
   padding: 0;
