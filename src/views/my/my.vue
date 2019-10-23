@@ -4,9 +4,9 @@
       <router-link to tag="div">
         <div class="img-box"></div>
         <div class="item-box">
-          <h3>登录/注册</h3>
+          <h3 ref="name" @click.stop="loginEvt">{{$store.state.user.name}}</h3>
           <span class="iconfont icon-phone"></span>
-          <span>登录后享受更多特权</span>
+          <span ref="phone">{{$store.state.user.phone}}</span>
           <span class="iconfont icon-next next"></span>
         </div>
       </router-link>
@@ -57,7 +57,29 @@ export default {
   },
   data(){
     return {
-      selected:"me"
+      selected:"me",
+      name:this.$store.state.user.name
+    }
+  },
+  computed:{
+    user(){
+      return this.$store.state.user.name;
+    }
+  },
+  watch:{
+    user(val){
+      console.log(val);
+    }
+  },
+  methods:{
+    loginEvt(){
+      let user = this.$store.getters.getUser;
+      if(user.name == '登录/注册'){
+        this.$router.push('/login');
+      }else{
+        return ;
+      }
+      
     }
   }
 };
@@ -91,6 +113,7 @@ a:focus {
       height: 0.6rem;
       border-radius: 50%;
       background-color: blue;
+      vertical-align: middle;
     }
     .item-box {
       float: left;
@@ -100,7 +123,8 @@ a:focus {
       color: #fff;
       position: relative;
       h3 {
-        font-size: 0.26rem;
+        font-size: 0.24rem;
+        margin-top: .06rem;
       }
       .next {
         position: absolute;

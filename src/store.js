@@ -5,7 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    shopcarData: []
+    shopcarData: [],
+    location:'广州',
+    user:{
+      name:'登录/注册',
+      phone:'登录后享受更多特权'
+    },
+    cardata:{},
   },
   mutations: {
     // 增加商品数量
@@ -45,6 +51,30 @@ export default new Vuex.Store({
         }
       }
 
+    },
+    // 设置location
+    moditityAddress(state, add){
+      state.location = add;
+    },
+    // user
+    saveUser(state, info){
+      state.user.name = info.name;
+      state.user.phone = info.phone;
+    },
+    // delete goods
+    clearGoods(state, id){
+      // console.log(id);
+      var i= 0;
+      for(; i<state.shopcarData.length; i++){
+       if(state.shopcarData[i].storeId == id){
+        state.shopcarData.splice(i, 1);
+        i -= 1;
+        // console.log(state.shopcarData);
+       }
+      }
+    },
+    savecarData(state, data){
+      state.cardata = data;
     }
   },
   getters: {
@@ -76,7 +106,7 @@ export default new Vuex.Store({
     // 给你整个选购的商品列表
     getList: (state) => (id) => {
       let list = [];
-      console.log(state.shopcarData);
+      // console.log(state.shopcarData);
       if (state.shopcarData == '') {
         return 0;
       } else {
@@ -88,7 +118,15 @@ export default new Vuex.Store({
         }
         return list;
       }
-      
     },
+    getUser(state){
+      return state.user;
+    },
+    getLocation(state){
+      return state.location;
+    },
+    getcarData(state){
+      return state.cardata;
+    }
   }
 })

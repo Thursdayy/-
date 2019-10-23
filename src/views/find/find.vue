@@ -1,7 +1,7 @@
 <template>
   <div class="find">
     <!-- toubu -->
-    <div class="head">
+    <div class="hd">
       <div class="first">
         <div class="items">
           <p class="title" v-text=head.first.title ></p>
@@ -142,7 +142,7 @@ export default {
     font-size: .14rem;
     background-color: #eee;
   }
-  .head{
+  .hd{
     width: 100%;
     height: 1.61rem;
     display: flex;

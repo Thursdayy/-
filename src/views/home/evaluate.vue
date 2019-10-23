@@ -1,7 +1,7 @@
 <template>
   <div class="evaluate">
     <!-- 评价头 -->
-    <div class="head">
+    <div class="hd">
       <div class="total">
         <p>{{head.storeEv}}</p>
         <div class="item">
@@ -179,7 +179,7 @@ ol {
   background-color: #eee;
 }
 // 评价头
-.head {
+.hd {
   width: 100%;
   // height: .955rem;
   padding: 0.2rem 0rem 0.3rem 0.24rem;
@@ -331,12 +331,12 @@ ol {
           margin-bottom: 0.1rem;
           margin-top: 0.05rem;
           .img-box {
-            width: 1.5rem;
-            height: 1.5rem;
+            width: 1.4rem;
+            height: 1.4rem;
             // background-color: pink;
             float: left;
             &:first-of-type{
-              margin-right: .1rem;
+              margin-right: .05rem;
             }
             img{
               width: 100%;

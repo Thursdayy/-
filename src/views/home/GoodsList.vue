@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="gooslist">
+      <!-- <div class="bx"> -->
       <ul
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
@@ -10,7 +11,7 @@
           <div tag="div" class="list-box" @click="toGoondInfo(item.id)">
             <div class="shop-info">
               <div class="img-box">
-                <img v-lazy="item.imgpath"/>
+                <img v-lazy="item.imgpath" />
               </div>
               <div class="item-box">
                 <div class="name">
@@ -35,20 +36,19 @@
                 <div class="distance">
                   <span class="iconfont icon-qian"></span>
                   <span v-text="item.starting"></span>
-                  <span>起送 | </span>
+                  <span>起送 |</span>
                   <span>配送费</span>
                   <span class="iconfont icon-qian"></span>
                   <span v-text="item.delivery"></span>
                   <span>元</span>
-                  <span class="fr" v-text="item.time"> 31分钟</span>      
-                  <span class="fr">{{item.distance}}|</span>            
+                  <span class="fr" v-text="item.time">31分钟</span>
+                  <span class="fr">{{item.distance}}|</span>
                 </div>
               </div>
-              
             </div>
             <div class="index-active">
               <div class="banner-label">
-                <button class="ban-btn"  v-for="ac in item.label" :key="ac.index">其他快餐</button>
+                <button class="ban-btn" v-for="ac in item.label" :key="ac.index">其他快餐</button>
               </div>
               <div class="active">
                 <div class="row" v-for="active in item.active" :key="active.index">
@@ -65,56 +65,67 @@
           </div>
         </li>
       </ul>
+      <!-- </div> -->
     </div>
   </div>
 </template>
 <script>
-import {getItems} from '@/api/homeItems';
+import { getItems } from "@/api/homeItems";
 export default {
   name: "GoodsList",
   data() {
     return {
       list: [],
       loading: true,
-      index:1,
+      index: 1
     };
   },
   created() {
-    this.getGoods(this.index++);
+    this.getGoods(this.index);
   },
   mounted() {
-    
+    this.index++;
   },
   props: ["good"],
   methods: {
     loadMore() {
-      this.loading = true;
-      // console.log("触发了");
-      // let id = this.index + 1;
-      this.getGoods(this.index++);
+      if (this.index != 1) {
+        this.loading = true;
+        console.log("滚动触发了获取更多列表数据");
+        // let id = this.index + 1;
+        this.getGoods(this.index++);
+      }
     },
-    getGoods(index){
+    getGoods(index) {
       getItems(index).then(res => {
-        if(index != 1){
-            for(let i=0; i<res.message.goodsList.length; i++){
-            res.message.goodsList[i].id = res.message.goodsList[i].id + ((index-1) * 5);
+        if (index != 1) {
+          for (let i = 0; i < res.message.goodsList.length; i++) {
+            res.message.goodsList[i].id =
+              res.message.goodsList[i].id + (index - 1) * 5;
           }
         }
         this.list = this.list.concat(res.message.goodsList);
         // console.log(this.list);
+        // console.log(this.loading);
         this.loading = false;
       });
     },
     toGoondInfo(id) {
-      this.$router.push({name:"goodsinfo", params:{id}});
+      this.$router.push({ name: "goodsinfo", params: { id } });
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.gooslist{
-  margin-bottom: .55rem;
+.gooslist {
+  margin-bottom: 0.55rem;
   background-color: #fff;
+  // height: 6.7rem;
+  overflow-y: hidden;
+}
+.bx {
+  // overflow: hidden;
+  height: 8.5rem;
 }
 ul {
   padding: 0;
@@ -153,7 +164,7 @@ ul {
             background-color: #ffe339;
             border-radius: 0.02rem;
             margin-right: 0.08rem;
-            font-size: .1rem;
+            font-size: 0.1rem;
           }
           .fr {
             float: right;
@@ -163,88 +174,86 @@ ul {
             margin-right: 0.1rem;
           }
         }
-        .star{
-          font-size: .12rem;
-          .icon-star{
-            font-size: .12rem;
-            &:nth-of-type(-n + 4)
-            {
+        .star {
+          font-size: 0.12rem;
+          .icon-star {
+            font-size: 0.12rem;
+            &:nth-of-type(-n + 4) {
               color: #ffe339;
             }
           }
-          .ev{
-            margin: 0rem .05rem;
+          .ev {
+            margin: 0rem 0.05rem;
           }
-          .fengniao{
+          .fengniao {
             float: right;
-            font-size: .12rem;
+            font-size: 0.12rem;
             background-color: #0085ff;
           }
         }
-        .distance{
-          font-size: .12rem;
-          margin-top: .05rem;
-          .fr{
+        .distance {
+          font-size: 0.12rem;
+          margin-top: 0.05rem;
+          .fr {
             float: right;
-            font-size: .12rem;
+            font-size: 0.12rem;
           }
         }
       }
-      
     }
-    .index-active{
-      padding-left: .73rem;
-      height: .70rem;
+    .index-active {
+      padding-left: 0.73rem;
+      height: 0.7rem;
       width: 100%;
-      font-size: .12rem;
-      .banner-label{
-        margin-top: .05rem;
-        padding-bottom: .05rem;
+      font-size: 0.12rem;
+      .banner-label {
+        margin-top: 0.05rem;
+        padding-bottom: 0.05rem;
         border-bottom: 1px solid #eee;
-        .ban-btn{
-          font-size: .10rem;
+        .ban-btn {
+          font-size: 0.1rem;
           border: 1px solid #eee;
           background: transparent;
         }
       }
-      .active{
+      .active {
         width: 100%;
-        height: .395rem;
-        font-size: .12rem;
-        padding-top: .05rem;
+        height: 0.395rem;
+        font-size: 0.12rem;
+        padding-top: 0.05rem;
         position: relative;
         overflow: hidden;
-        .row{
-          .main{
-            width: .15rem;
-            height: .15rem;
-            line-height: .15rem;
-            border-radius: .02rem;
+        .row {
+          .main {
+            width: 0.15rem;
+            height: 0.15rem;
+            line-height: 0.15rem;
+            border-radius: 0.02rem;
             background-color: green;
             float: left;
-            margin-right: .05rem;
+            margin-right: 0.05rem;
             vertical-align: middle;
           }
-          span{
+          span {
             display: inline-block;
-            font-size: .12rem;
-            line-height: .14rem;
-            width: calc(100% - .2rem);
+            font-size: 0.12rem;
+            line-height: 0.14rem;
+            width: calc(100% - 0.2rem);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
           }
         }
-        .muchAc{
+        .muchAc {
           position: absolute;
-          top: .05rem;
+          top: 0.05rem;
           right: 0;
-          span{
-            font-size: .12rem;
+          span {
+            font-size: 0.12rem;
             color: #999;
           }
-          .iconfont{
-            font-size: .10rem;
+          .iconfont {
+            font-size: 0.1rem;
           }
         }
       }

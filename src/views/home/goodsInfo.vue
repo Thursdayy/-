@@ -1,6 +1,6 @@
 <template>
   <div class="goodsinfo" ref="store" :id="head.id">
-    <header class="head" ref="head">
+    <header class="hd" ref="head">
       <span class="iconfont icon-shangyiye" @click="clickBack"></span>
       <div class="storeimg">
         <img :src="head.logo" />
@@ -42,17 +42,21 @@
     </div>
     <!-- container navbar -->
     <div class="bd">
-      <mt-navbar v-model="selected" ref="nav">
-        <mt-tab-item id="1">
-          <span>点餐</span>
-        </mt-tab-item>
-        <mt-tab-item id="2">
-          <span>评价</span>
-        </mt-tab-item>
-        <mt-tab-item id="3">
-          <span>商家</span>
-        </mt-tab-item>
-      </mt-navbar>
+      <div class="nav-box">
+        <div ref="nav">
+          <mt-navbar v-model="selected">
+            <mt-tab-item id="1">
+              <span>点餐</span>
+            </mt-tab-item>
+            <mt-tab-item id="2">
+              <span>评价</span>
+            </mt-tab-item>
+            <mt-tab-item id="3">
+              <span>商家</span>
+            </mt-tab-item>
+          </mt-navbar>
+        </div>
+      </div>
 
       <!-- tab-container -->
       <mt-tab-container v-model="selected">
@@ -60,17 +64,17 @@
           <div class="store-recommond">
             <p>商家推荐</p>
             <!-- <div class="rec-swipe"> -->
-            <div
-              class="rec-swipe"
-              @touchstart="touchStart"
-              @touchmove="touchMove"
-              @touchend="touchEnd"
-              ref="move"
-            >
-              <ul ref="moveList">
+            <div class="rec-swipe" ref="move">
+              <ul
+                ref="moveList"
+                @touchstart="touchStart"
+                @touchmove="touchMove"
+                @touchend="touchEnd"
+                :style="slideStyle"
+              >
                 <li>
                   <div class="img-box">
-                    <img src="http://localhost:3000/www/images/goodsinfo/dc1.webp" />
+                    <img src="http://106.12.109.217:3000/www/images/goodsinfo/dc1.webp" />
                   </div>
                   <div class="item-box">
                     <p class="name">黑椒厚切牛扒饭+饮品</p>
@@ -86,7 +90,7 @@
                 </li>
                 <li>
                   <div class="img-box">
-                    <img src="http://localhost:3000/www/images/goodsinfo/dc1.webp" />
+                    <img src="http://106.12.109.217:3000/www/images/goodsinfo/dc1.webp" />
                   </div>
                   <div class="item-box">
                     <p class="name">黑椒厚切牛扒饭+饮品</p>
@@ -102,7 +106,7 @@
                 </li>
                 <li>
                   <div class="img-box">
-                    <img src="http://localhost:3000/www/images/goodsinfo/dc1.webp" />
+                    <img src="http://106.12.109.217:3000/www/images/goodsinfo/dc1.webp" />
                   </div>
                   <div class="item-box">
                     <p class="name">黑椒厚切牛扒饭+饮品</p>
@@ -118,7 +122,7 @@
                 </li>
                 <li>
                   <div class="img-box">
-                    <img src="http://localhost:3000/www/images/goodsinfo/dc1.webp" />
+                    <img src="http://106.12.109.217:3000/www/images/goodsinfo/dc1.webp" />
                   </div>
                   <div class="item-box">
                     <p class="name">黑椒厚切牛扒饭+饮品</p>
@@ -134,7 +138,7 @@
                 </li>
                 <li>
                   <div class="img-box">
-                    <img src="http://localhost:3000/www/images/goodsinfo/dc1.webp" />
+                    <img src="http://106.12.109.217:3000/www/images/goodsinfo/dc1.webp" />
                   </div>
                   <div class="item-box">
                     <p class="name">黑椒厚切牛扒饭+饮品</p>
@@ -150,7 +154,7 @@
                 </li>
                 <li>
                   <div class="img-box">
-                    <img src="http://localhost:3000/www/images/goodsinfo/dc1.webp" />
+                    <img src="http://106.12.109.217:3000/www/images/goodsinfo/dc1.webp" />
                   </div>
                   <div class="item-box">
                     <p class="name">黑椒厚切牛扒饭+饮品</p>
@@ -168,10 +172,11 @@
             </div>
           </div>
           <!-- 商品 -->
-          <div class="goods">
+          <div class="goods" ref="lf">
             <div class="main" ref="main">
               <div class="mui-content mui-row">
                 <!-- 左边 -->
+
                 <div class="mui-col-xs-3">
                   <div
                     id="segmentedControls"
@@ -190,13 +195,15 @@
                     </a>
                   </div>
                 </div>
+
                 <!-- 右边 -->
-                <div id="segmentedControlContents" class="mui-col-xs-9">
+                <div id="segmentedControlContents" class="mui-col-xs-9 rg slider" ref="lis">
                   <div
                     v-for="item in list"
                     :key="item.index"
                     class="mui-control-content"
                     ref="rOpt"
+                    id="1"
                   >
                     <div class="box">
                       <p class="title">
@@ -251,7 +258,7 @@
                   <span></span>
                 </p>
               </div>
-              <a class="topay" ref="payBtn">去结算</a>
+              <a class="topay" ref="payBtn" @click.stop="topay">去结算</a>
             </div>
           </div>
           <div class="popup">
@@ -300,11 +307,7 @@ export default {
   data() {
     return {
       selected: "1",
-      id:this.$route.params.id,
-      startX: 0,
-      moveX: 0,
-      endX: 0,
-      disX: 0,
+      id: this.$route.params.id,
       originalX: 0,
       head: {
         desc: {},
@@ -319,50 +322,90 @@ export default {
       popupVisible: false,
       showlist: [],
       ftprice: {
+        sid: this.$route.params.id,
         num: 0,
         price: 0
       },
+      flag: false,
+      starX: 0,
+      endX: 0,
+      slideStyle: {
+        left: 0,
+        transition: "none"
+      }
     };
   },
   created() {
     // console.log(this.id)
+    // window.removeEventListener('scroll', this.ScrollEvt);
     this.getData();
+    window.addEventListener("scroll", this.ScrollEvt, false);
+  },
+  mounted() {
+    setTimeout(() => {
+      this.getAllData(this.id);
+      // console.log(this.showlist);
+      // this.ftprice = this.$store.getters.getcarData;
+      // console.log(this.$store.getters.getcarData);
+
+      var l = this.$store.getters.getcarData;
+      if (l.num != undefined) {
+        this.ftprice = l;
+        this.ftClickEvt();
+      }
+    }, 500);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.ScrollEvt);
   },
   methods: {
     touchStart: function(ev) {
       ev = ev || event;
       ev.preventDefault();
-      if (ev.touches.length == 1) {
-        //一个手指在滑动
-        this.startX = ev.touches[0].clientX; //记录开始X位置
-      }
+      this.flag = true;
+      this.starX = ev.touches[0].clientX;
+      this.endX = this.$refs.moveList.offsetLeft;
+      this.slideStyle.transition = "none";
     },
     touchMove: function(ev) {
       ev = ev || event;
       ev.preventDefault();
-      var boxWidth = this.$refs.move.offsetWidth;
-      var ListWidth = this.$refs.moveList.offsetWidth;
-      var x = this.$refs.moveList.getBoundingClientRect();
-      // console.log(x);
-      if (ev.touches.length == 1) {
-        this.moveX = ev.touches[0].clientX;
-
-        this.disX = this.moveX - this.startX;
-        // var tx = this.disX + x.left;
-        var tx = 10 + x.left;
-        console.log(tx);
-        if (this.disX < 0 || this.disX == 0) {
-          if (tx > -421) {
-            this.$refs.moveList.style.transform = "translateX(" + -tx + "px)";
-          }
-        } else if (this.disX > 0) {
-          if (tx < 0) {
-            this.$refs.moveList.style.transform = "translateX(" + tx + "px)";
-          }
-        }
+      var moveX = this.endX + (ev.touches[0].clientX - this.starX);
+      // if(Math.abs(moveX) > = this.$refs)
+      // console.log(moveX)
+      if (moveX < 0 && moveX > -414) {
+        this.slideStyle.left = moveX + "px";
+      } else {
+        // this.slideStyle.left = moveX + "px";
       }
     },
     touchEnd: function(ev) {},
+    // 滚动事件
+    ScrollEvt() {
+      let top = window.pageYOffset;
+      // console.log(top);
+      if (top > 262) {
+        this.$refs.nav.style.position = "fixed";
+        this.$refs.nav.style.width = "100%";
+        this.$refs.nav.style.top = 0;
+        this.$refs.nav.style.left = 0;
+        this.$refs.nav.style.zIndex = 2;
+      } else {
+        this.$refs.nav.style.position = "";
+      }
+      if (top >= 463) {
+        this.$refs.lis.classList.remove("slider");
+      } else {
+        this.$refs.lis.classList.add("slider");
+      }
+      // if (top > 515) {
+      //   this.$refs.lf.style.position = "fixed";
+      //   this.$refs.lf.style.top = "50px";
+      //   this.$refs.lf.style.left = "0";
+      //   // this.$refs.gl.$el.style.zIndex = 2;
+      // }
+      // console.log(top);
+    },
     // 获取数据
     getData: function() {
       // console.log(this.$route.params.id);
@@ -406,16 +449,16 @@ export default {
       var rList = this.$refs.rOpt;
       rList[0].classList.add("mui-active");
       for (var i = 0; i < rList.length; i++) {
-        rList[i].id = "content" + (i + 1);
+        // rList[i].name = "content" + (i + 1);
+        rList[i].setAttribute("name", "#content" + (i + 1));
+        rList[i].id = "#content" + (i + 1);
       }
     },
     // 点击添加按钮
     addBtn: function(el) {
       var Id;
       var storeId = this.$refs.store.id; //店铺id
-
       var goodId = el.target.parentElement.id; //商品的id
-
       var index = parseInt((goodId - 1) / 6);
       if (goodId > 6) {
         Id = goodId - 6;
@@ -431,7 +474,7 @@ export default {
       this.getGoodsCount({ storeId: storeId, id: goodId });
       // this.getPopupData();
       this.ftprice.num++;
-      console.log(goodList.price.substr(1));
+      // console.log(goodList.price.substr(1));
       this.ftprice.price =
         this.ftprice.price + Number(goodList.price.substr(1));
       this.ftprice.price = this.ftprice.price;
@@ -501,6 +544,8 @@ export default {
     // 点击清空
     clearEvt: function() {
       this.carClear();
+      // console.log(this.showlist);
+      this.$store.commit("clearGoods", 1);
       this.showlist = [];
       this.getAllData(this.$refs.store.id);
     },
@@ -556,7 +601,7 @@ export default {
       var allData = this.$store.getters.getList(id);
       var as = this.$refs.ab;
       var bs = this.$refs.lOpt;
-      console.log(allData);
+      // console.log(allData);
       if (allData == 0) {
         for (let i = 0; i < as.length; i++) {
           (as[i].children[1].innerText = ""),
@@ -589,8 +634,23 @@ export default {
       }
     },
     // go back
-    clickBack: function(){
+    clickBack: function() {
       this.$router.go(-1);
+    },
+    topay() {
+      var user = this.$store.getters.getUser;
+      if (user.name == "登录/注册") {
+        this.$router.push({ name: "login", params: {} });
+      } else {
+        if (this.ftprice.num !== 0) {
+          this.$router.push({ name: "checkout", params: { id: this.id } });
+        }
+      }
+    }
+  },
+  watch: {
+    "ftprice.num": function() {
+      this.$store.commit("savecarData", this.ftprice);
     }
   },
   components: {
@@ -604,7 +664,7 @@ export default {
   font-size: 0.14rem;
   background-color: #fff;
 }
-.gl{
+.gl {
   margin-bottom: 0.48rem;
 }
 * {
@@ -624,7 +684,7 @@ ul {
   list-style: none;
 }
 // head
-.head {
+.hd {
   width: 100%;
   height: 1rem;
   // background-color: lightgreen;
@@ -642,7 +702,7 @@ ul {
     width: 0.75rem;
     height: 0.75rem;
     position: absolute;
-    background-color: orange;
+    // background-color: orange;
     bottom: -0.1rem;
     left: 50%;
     transform: translateX(-50%);
@@ -652,6 +712,10 @@ ul {
       height: 100%;
     }
   }
+}
+.nav-box {
+  width: 100%;
+  height: 0.5rem;
 }
 // store name
 .store {
@@ -901,7 +965,7 @@ ul {
       position: relative;
       width: 100%;
       // height: 10rem;
-      overflow: hidden;
+      overflow-y: auto;
       .mui-row {
         // overflow: hidden;
         // border: 0px solid transparent;
@@ -1195,5 +1259,11 @@ ul {
       }
     }
   }
+}
+.rg {
+  height: 5.67rem;
+}
+.slider {
+  overflow-y: hidden !important;
 }
 </style>

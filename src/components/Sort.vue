@@ -14,31 +14,31 @@
     </div>
     <div class="section" ref="sec">
       <ul>
-        <li @click="sortEvt(1)">
+        <li @click="sortEvt($event)">
           <span>综合排序</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>好评优先</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>销量最高</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>起送价最低</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>配送最快</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>配送费最低</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>人均从低到高</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>人均从高到低</span>
         </li>
-        <li>
+        <li @click="sortEvt($event)">
           <span>通用排序</span>
         </li>
       </ul>
@@ -191,8 +191,9 @@ export default {
       section.style.display = "none";
       xuan.style.display = "none";
     },
-    sortEvt(id) {
-      this.$parent.selecteEvt();
+    sortEvt(ev) {
+      var text = ev.currentTarget.children[0].innerText;
+      this.$parent.selecteEvt(text);
       this.$parent.markEvt();
     },
     // clearEvt
@@ -212,7 +213,10 @@ export default {
       
     },
     // identityEvt
-    identityEvt() {},
+    identityEvt() {
+      this.$parent.markEvt();
+      this.$parent.selecteEvt('筛选确认');
+    },
     ClickBox1: function(ev) {
       let id = ev.currentTarget.id;
       let list = ev.currentTarget.parentElement.children;   
@@ -227,8 +231,9 @@ export default {
     },
     ClickBox3: function(ev) {
       let id = ev.currentTarget.id;
-      ev.currentTarget.classList.add('selected')
+      ev.currentTarget.classList.add('selected');
     }
+    
   }
 };
 </script>
@@ -255,6 +260,7 @@ ol {
   font-size: 0.14rem;
   color: #000;
   width: 100%;
+  z-index: 4;
 }
 .sort {
   background-color: #fff;
