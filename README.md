@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # elmeview
 
 ## Project setup
@@ -27,3 +28,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+=======
+# -
+饿了么页面练习
+>>>>>>> b3080bc52209a5998065026f88cd34a1f8fc7396
