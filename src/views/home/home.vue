@@ -46,7 +46,6 @@
       <mt-sort ref="sort"></mt-sort>
       <!-- </div> -->
       <mt-goodslist v-bind:good="indexid" ref="lis"></mt-goodslist>
-      
       <div class="mark" ref="mark" @click="markEvt"></div>
     </div>
     <mt-address v-if="flag" @retParent="reEvt"></mt-address>
@@ -154,6 +153,9 @@ export default {
     },
     // dingwei
     getLocation() {
+      if (this.$store.getters.getLocation !== '') {
+        return
+      }
       var geolocation = new BMap.Geolocation();
       var that = this;
       geolocation.getCurrentPosition(function(r) {

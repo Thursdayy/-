@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     shopcarData: [],
-    location:'广州',
+    location:'',
     user:{
       name:'登录/注册',
       phone:'登录后享受更多特权'
