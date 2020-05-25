@@ -184,11 +184,13 @@
                   >
                     <a
                       class="mui-control-item"
-                      v-for="item in list"
-                      :key="item.index"
+                      :class="{'active' : currentIndex === index}"
+                      v-for="(item, index ) in list"
+                      :key="index"
                       data-index="1"
                       href="#1"
                       ref="lOpt"
+                      @click="leftClick(index)"
                     >
                       {{item.name}}
                       <span class="badge"></span>
@@ -197,7 +199,7 @@
                 </div>
 
                 <!-- 右边 -->
-                <div id="segmentedControlContents" class="mui-col-xs-9 rg slider" ref="lis">
+                <div id="segmentedControlContents" class="mui-col-xs-9 rg slider" ref="lis" @scroll="rightScroll($event)">
                   <div
                     v-for="item in list"
                     :key="item.index"
@@ -307,6 +309,8 @@ export default {
   data() {
     return {
       selected: "1",
+      currentIndex: 0,
+      rightHeight: [],
       id: this.$route.params.id,
       originalX: 0,
       head: {
@@ -359,6 +363,23 @@ export default {
     window.removeEventListener("scroll", this.ScrollEvt);
   },
   methods: {
+    // 右边滚动
+    rightScroll (event) {
+      let scrollTop = event.target.scrollTop
+      if (this.rightHeight.length === 0) {
+        return ;
+      }
+      let index = this.rightHeight.findIndex((height, index) => {
+        return scrollTop >= this.rightHeight[index] && scrollTop < this.rightHeight[index + 1];
+      })
+      this.currentIndex = index;
+    },
+    // 左边菜单点击
+    leftClick (index) {
+      this.currentIndex = index;
+      let right = this.$refs.lis;
+      right.scrollTop = this.rightHeight[index];
+    },
     touchStart: function(ev) {
       ev = ev || event;
       ev.preventDefault();
@@ -422,9 +443,10 @@ export default {
             }
             this.setbg();
             setTimeout(() => {
-              this.leftOpt();
-              this.rightOpt();
-            }, 1000);
+              // this.leftOpt();
+              // this.rightOpt();
+              this.calculateHeight();
+            }, 500);
           }
         })
         .catch(error => {
@@ -435,25 +457,36 @@ export default {
     setbg: function() {
       this.$refs.head.style.backgroundImage = "url(" + this.head.imgpath + ")";
     },
-    // 商品左边锚点
-    leftOpt: function() {
-      var lList = this.$refs.lOpt;
-      lList[0].classList.add("mui-active");
-      for (var i = 0; i < lList.length; i++) {
-        lList[i].href = "#content" + (i + 1);
-        lList[i].setAttribute("data-index", i + 1);
+    // 计算右边各项高度
+    calculateHeight () {
+      let height = 0;
+      this.rightHeight.push(height)
+      let itemList = this.$refs.rOpt;
+      for (let i = 0; i < itemList.length; i++) {
+        height += itemList[i].clientHeight;
+        this.rightHeight.push(height)
       }
+      console.log(this.rightHeight);
     },
-    // 商品右边锚点
-    rightOpt: function() {
-      var rList = this.$refs.rOpt;
-      rList[0].classList.add("mui-active");
-      for (var i = 0; i < rList.length; i++) {
-        // rList[i].name = "content" + (i + 1);
-        rList[i].setAttribute("name", "#content" + (i + 1));
-        rList[i].id = "#content" + (i + 1);
-      }
-    },
+    // // 商品左边锚点
+    // leftOpt: function() {
+    //   var lList = this.$refs.lOpt;
+    //   lList[0].classList.add("mui-active");
+    //   for (var i = 0; i < lList.length; i++) {
+    //     lList[i].href = "#content" + (i + 1);
+    //     lList[i].setAttribute("data-index", i + 1);
+    //   }
+    // },
+    // // 商品右边锚点
+    // rightOpt: function() {
+    //   var rList = this.$refs.rOpt;
+    //   rList[0].classList.add("mui-active");
+    //   for (var i = 0; i < rList.length; i++) {
+    //     // rList[i].name = "content" + (i + 1);
+    //     rList[i].setAttribute("name", "#content" + (i + 1));
+    //     rList[i].id = "#content" + (i + 1);
+    //   }
+    // },
     // 点击添加按钮
     addBtn: function(el) {
       var Id;
@@ -996,11 +1029,15 @@ ul {
       .mui-segmented-control.mui-segmented-control-inverted
         .mui-control-item.mui-active {
         color: #333;
-        background-color: #fff;
+        // background-color: #fff;
+      }
+      .active{
+        background-color: #fff !important;
       }
       .box {
         // height: 0.6rem;
         width: 100%;
+        overflow: hidden;
         .title {
           margin: 0.03rem 0rem;
           span {
